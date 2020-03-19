@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,6 +17,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final CameraPosition _initialPosition = CameraPosition(target: LatLng(-6.210484, 106.822257));
 
+  final List<Marker> markers = [];
+
+  addMarker(cordinate) {
+
+    int id = Random().nextInt(100);
+
+    setState(() {
+      markers.add(Marker(position: cordinate, markerId: MarkerId(id.toString())));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
               _controller = controller;
             });
           },
+          markers: markers.toSet(),
           onTap: (cordinate) {
             _controller.animateCamera(CameraUpdate.newLatLng(cordinate));
+            addMarker(cordinate);
           },
         )
       ),
